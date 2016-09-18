@@ -18,7 +18,9 @@ public class Arkanoid extends GraphicApplication {
 	private Bloco bloco;
 	private Sprite paddle;
 	private boolean desenhaBloco=true, move = false;
-	private int vida = 3;
+	private int vida = 3, score = 0, recorde = 0;
+	
+	//=============Inicia canvas============\\
 
 	@Override
 	protected void draw(Canvas canvas) {
@@ -32,8 +34,17 @@ public class Arkanoid extends GraphicApplication {
 		
 		paddle.draw(canvas);
 		
-	}
+		canvas.putText(2, 2, 10, "RECORDE:");
+		canvas.putText(60, 2, 10, String.format("%05d", recorde));
+		canvas.putText(100, 2, 10, "SCORE:");
+		canvas.putText(143, 2, 10, String.format("%05d", score));
+		canvas.putText(183, 2, 10, "VIDAS:");
+		canvas.putText(223, 2, 10, String.valueOf(vida));
+		
+	}//fecha canvas
 
+	//=============Inicia setup============\\
+	
 	@Override
 	protected void setup() {
 		setResolution(Resolution.MSX);
@@ -92,6 +103,8 @@ public class Arkanoid extends GraphicApplication {
 			}
 		});
 	}//fecha setup
+	
+	//=============Inicia loop============\\
 
 	@Override
 	protected void loop() {
@@ -129,6 +142,8 @@ public class Arkanoid extends GraphicApplication {
 		redraw();
 	}//fecha loop
 	
+	//=============Inicia funções do jogo============\\
+	
 	private void colidiuParede(Bola bola, Sprite paddle) {
 		Point posicao = bola.getPosition();
 		if (posicao.x < 0 || posicao.x >= Resolution.MSX.width-5){
@@ -151,7 +166,7 @@ public class Arkanoid extends GraphicApplication {
 	}//fecha colisão com paddle
 	
 	private void reiniciar(Bola bola, Sprite paddle){
-		String continuar = "";
+		int continuar;
 			paddle.setPosition(
 					Resolution.MSX.width/2-5,
 					Resolution.MSX.height-10
@@ -162,20 +177,20 @@ public class Arkanoid extends GraphicApplication {
 					);
 			move = false;
 			vida--;
-			JOptionPane.showMessageDialog(null, "Você tem ainda tem "+vida+" Vidas");
 			if(vida == 0){
-				continuar = JOptionPane.showInputDialog(null, "Continuar?\n"+"[s] ou [n]", 
-						JOptionPane.QUESTION_MESSAGE);
-				if(continuar.equalsIgnoreCase("s")){
+				continuar = JOptionPane.showConfirmDialog(null, "Deseja jogar novamente?", 
+						"Fim de jogo", JOptionPane.YES_NO_OPTION);
+				if(continuar == 0){
 					vida = 3;
-				}else if(continuar.equalsIgnoreCase("n")){
-					System.exit(0);
+					score = 0;
 				}else{
-					JOptionPane.showMessageDialog(null, "Erro, opção inválida!\n"+"Escolha uma opção válida");
+					System.exit(0);
 				}//fecha else interno
 			}//fecha if para continuar
 			
 	}//fecha metodo de reiniciar
+	
+	//=============Encerra funções============\\
 	
 }//fecha classe
 
