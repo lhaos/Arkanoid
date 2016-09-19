@@ -24,10 +24,10 @@ public class Arkanoid extends GraphicApplication {
 	private Bloco[] linhaQuatro = new Bloco[blocoArray];
 	private Bloco[] linhaCinco = new Bloco[blocoArray];
 	private Bloco[] linhaSeis = new Bloco[blocoArray];
-	private Sprite paddle;
+	private Paddle paddle;
 	private Image fundo;
-	private boolean move = false;
-	private int vida = 10 , score = 0, recorde = 0, fase = 1;
+	private boolean move = false, fase2 = false, fase3 = false, faseFinal = false, mudarFase = false;
+	private int vida = 10 , score = 0, recorde = 0, fase = 1, valorDeFase = 6000;
 
 	// =============Inicia canvas============\\
 
@@ -70,8 +70,6 @@ public class Arkanoid extends GraphicApplication {
 
 		bola = new Bola(fase);
 
-		bola.setPosition(Resolution.MSX.width / 2 + 5, Resolution.MSX.height - 16);
-
 		bindKeyPressed("SPACE", new KeyboardAction() {
 			@Override
 			public void handleEvent() {
@@ -81,9 +79,7 @@ public class Arkanoid extends GraphicApplication {
 		
 		criaBlocos();
 
-		paddle = new Sprite(25, 5, Color.BLACK);
-
-		paddle.setPosition(Resolution.MSX.width / 2 - 5, Resolution.MSX.height - 10);
+		paddle = new Paddle();
 
 		bindKeyPressed("LEFT", new KeyboardAction() {
 			@Override
@@ -154,7 +150,7 @@ public class Arkanoid extends GraphicApplication {
 		}
 	}
 	
-	private void colidiuParede(Bola bola, Sprite paddle) {
+	private void colidiuParede(Bola bola, Paddle paddle) {
 		Point posicao = bola.getPosition();
 		if (posicao.x < 0 || posicao.x >= Resolution.MSX.width - 5) {
 			bola.invertHorizontal();
@@ -170,7 +166,7 @@ public class Arkanoid extends GraphicApplication {
 	private void colidiuPaddle(Bola bola, Sprite paddle) {
 		Point posicaoB = bola.getPosition();
 		Point posicaoP = paddle.getPosition();
-		if (posicaoB.y + 5 == posicaoP.y && posicaoP.x + 27 >= posicaoB.x + 5 && posicaoP.x <= posicaoB.x + 5) {
+		if (posicaoB.y + 5 == posicaoP.y && posicaoP.x + 27 >= posicaoB.x && posicaoP.x <= posicaoB.x + 5) {
 			bola.invertVertical();
 		}
 	}// fecha colisão com paddle
@@ -187,7 +183,7 @@ public class Arkanoid extends GraphicApplication {
 	}//fecha colisão com os blocos
 	
 	private void criaBlocos() {
-		if(fase == 1){
+		
 		for (int i = 0; i < blocoArray; i++) {
 			int x = (i % 10) * 25 + 2;
 			linhaUm[i] = new Bloco(Color.GRAY);
@@ -204,29 +200,57 @@ public class Arkanoid extends GraphicApplication {
 			linhaSeis[i].setPosition(new Point(x, 72));
 
 		}
-		}else{
-			
-		}
+		
 	}//fecha metodo para criar os blocos
 	
 	
 	private void trocaFase(){
-		if(score == 6000){
+		
+		if(score == valorDeFase && fase == 1){
 			fase++;
+			valorDeFase += valorDeFase;
 			criaBlocos();
-		}
-	}
+			paddle.paddleInicio();
+			bola.bolaInicio();
+			JOptionPane.showMessageDialog(null, "Round "+(fase+1));
+			fase2 = true;
+			mudarFase = false;
+		}else if(score == valorDeFase && fase == 2){
+			fase++;
+			valorDeFase += valorDeFase;
+			criaBlocos();
+			paddle.paddleInicio();
+			bola.bolaInicio();
+			JOptionPane.showMessageDialog(null, "Round "+(fase+1));
+			fase3 = true;
+			mudarFase = false;
+		}else if(score == valorDeFase && fase == 3){
+			JOptionPane.showMessageDialog(null, "VOCÊ VENCEU, PARABÉNS!");
+			int continuar;
+			continuar = JOptionPane.showConfirmDialog(null, "Deseja jogar novamente?", "Game Over",
+					JOptionPane.YES_NO_OPTION);
+			if (continuar == 0) {
+				fase = 1;
+				valorDeFase += valorDeFase;
+				mudarFase = false;
+				criaBlocos();
+			} else {
+				System.exit(0);
+			}
+		}//fecha else if
+	}//fecha metodo para trocar de fase
 
-	private void reiniciar(Bola bola, Sprite paddle) {
+	private void reiniciar(Bola bola, Paddle paddle) {
 		int continuar;
-		paddle.setPosition(Resolution.MSX.width / 2 - 5, Resolution.MSX.height - 10);
-		bola.setPosition(Resolution.MSX.width / 2 + 5, Resolution.MSX.height - 16);
+		bola.bolaInicio();
+		paddle.paddleInicio();
 		move = false;
 		vida--;
 		if (vida == 0) {
 			continuar = JOptionPane.showConfirmDialog(null, "Deseja jogar novamente?", "Game Over",
 					JOptionPane.YES_NO_OPTION);
 			if (continuar == 0) {
+				fase = 1;
 				vida = 3;
 				score = 0;
 				criaBlocos();
