@@ -4,13 +4,20 @@ import com.senac.SimpleJava.Graphics.Color;
 import com.senac.SimpleJava.Graphics.Sprite;
 
 public class Bola extends Sprite {
-	private int dy = 1;
-	private int dx = 1;
+	private int dy = 0;
+	private int dx = 0;
 
-	public Bola() {
+	public Bola(int fase) {
 		super(5,5,Color.BLACK);
+		dy = fase;
+		dx = fase;
 	}
 
+	public void bolaFase(int fase){
+		dx = fase;
+		dy = fase;
+	}
+	
 	public void move() {
 		super.move(dx, dy);
 	}

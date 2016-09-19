@@ -19,9 +19,12 @@ public class Arkanoid extends GraphicApplication {
 	private Bloco[] linhaUm = new Bloco[blocoArray];
 	private Bloco[] linhaDois = new Bloco[blocoArray];
 	private Bloco[] linhaTres = new Bloco[blocoArray];
+	private Bloco[] linhaQuatro = new Bloco[blocoArray];
+	private Bloco[] linhaCinco = new Bloco[blocoArray];
+	private Bloco[] linhaSeis = new Bloco[blocoArray];
 	private Sprite paddle;
 	private boolean move = false;
-	private int vida = 3, score = 0, recorde = 0;
+	private int vida = 10 , score = 0, recorde = 0, fase = 1;
 
 	// =============Inicia canvas============\\
 
@@ -35,6 +38,9 @@ public class Arkanoid extends GraphicApplication {
 			linhaUm[i].draw(canvas);
 			linhaDois[i].draw(canvas);
 			linhaTres[i].draw(canvas);
+			linhaQuatro[i].draw(canvas);
+			linhaCinco[i].draw(canvas);
+			linhaSeis[i].draw(canvas);
 
 		} // fecha for para blocos
 
@@ -54,9 +60,9 @@ public class Arkanoid extends GraphicApplication {
 	@Override
 	protected void setup() {
 		setResolution(Resolution.MSX);
-		setFramesPerSecond(60);
+		setFramesPerSecond(100);
 
-		bola = new Bola();
+		bola = new Bola(fase);
 
 		bola.setPosition(Resolution.MSX.width / 2 + 5, Resolution.MSX.height - 16);
 
@@ -79,7 +85,7 @@ public class Arkanoid extends GraphicApplication {
 				Point posicaoP = paddle.getPosition();
 
 				if (Resolution.MSX.width - 254 < posicaoP.x && move == true) {
-					paddle.move(-4, 0);
+					paddle.move(-5, 0);
 				} else {
 					paddle.move(0, 0);
 				} // fecha else
@@ -91,7 +97,7 @@ public class Arkanoid extends GraphicApplication {
 				Point posicaoP = paddle.getPosition();
 
 				if (Resolution.MSX.width > posicaoP.x + 25 && move == true) {
-					paddle.move(4, 0);
+					paddle.move(5, 0);
 				} else {
 					paddle.move(0, 0);
 				} // fecha else
@@ -108,9 +114,17 @@ public class Arkanoid extends GraphicApplication {
 		colidiuBloco(linhaUm);
 		colidiuBloco(linhaDois);
 		colidiuBloco(linhaTres);
+		colidiuBloco(linhaQuatro);
+		colidiuBloco(linhaCinco);
+		colidiuBloco(linhaSeis);
+		
 		
 		if(move){
 			bola.move();
+		}
+		
+		if(recorde < score){
+			recorde = score;
 		}
 				
 		redraw();
@@ -123,7 +137,7 @@ public class Arkanoid extends GraphicApplication {
 		if (posicao.x < 0 || posicao.x >= Resolution.MSX.width - 5) {
 			bola.invertHorizontal();
 		}
-		if (posicao.y < 0) {
+		if (posicao.y < 15) {
 			bola.invertVertical();
 		}
 		if (posicao.y >= Resolution.MSX.height - 5) {
@@ -134,7 +148,7 @@ public class Arkanoid extends GraphicApplication {
 	private void colidiuPaddle(Bola bola, Sprite paddle) {
 		Point posicaoB = bola.getPosition();
 		Point posicaoP = paddle.getPosition();
-		if (posicaoB.y + 5 == posicaoP.y && posicaoP.x + 25 >= posicaoB.x + 5 && posicaoP.x <= posicaoB.x + 5) {
+		if (posicaoB.y + 5 == posicaoP.y && posicaoP.x + 27 >= posicaoB.x + 5 && posicaoP.x <= posicaoB.x + 5) {
 			bola.invertVertical();
 		}
 	}// fecha colisão com paddle
@@ -149,6 +163,25 @@ public class Arkanoid extends GraphicApplication {
 		}//fecha for
 			
 	}//fecha colisão com os blocos
+	
+	private void criaBlocos() {
+		for (int i = 0; i < blocoArray; i++) {
+			int x = (i % 10) * 25 + 2;
+			linhaUm[i] = new Bloco(fase);
+			linhaUm[i].setPosition(new Point(x, 27));
+			linhaDois[i] = new Bloco(fase);
+			linhaDois[i].setPosition(new Point(x, 36));
+			linhaTres[i] = new Bloco(fase);
+			linhaTres[i].setPosition(new Point(x, 45));
+			linhaQuatro[i] = new Bloco(fase);
+			linhaQuatro[i].setPosition(new Point(x, 54));
+			linhaCinco[i] = new Bloco(fase);
+			linhaCinco[i].setPosition(new Point(x, 63));
+			linhaSeis[i] = new Bloco(fase);
+			linhaSeis[i].setPosition(new Point(x, 72));
+
+		}
+	}//fecha metodo para criar os blocos
 
 	private void reiniciar(Bola bola, Sprite paddle) {
 		int continuar;
@@ -157,11 +190,12 @@ public class Arkanoid extends GraphicApplication {
 		move = false;
 		vida--;
 		if (vida == 0) {
-			continuar = JOptionPane.showConfirmDialog(null, "Deseja jogar novamente?", "Fim de jogo",
+			continuar = JOptionPane.showConfirmDialog(null, "Deseja jogar novamente?", "Game Over",
 					JOptionPane.YES_NO_OPTION);
 			if (continuar == 0) {
 				vida = 3;
 				score = 0;
+				criaBlocos();
 			} else {
 				System.exit(0);
 			} // fecha else interno
@@ -169,18 +203,6 @@ public class Arkanoid extends GraphicApplication {
 
 	}// fecha metodo de reiniciar o jogo
 
-	private void criaBlocos() {
-		for (int i = 0; i < blocoArray; i++) {
-			int x = (i % 10) * 26 + 2;
-			linhaUm[i] = new Bloco();
-			linhaUm[i].setPosition(new Point(x, 28));
-			linhaDois[i] = new Bloco();
-			linhaDois[i].setPosition(new Point(x, 39));
-			linhaTres[i] = new Bloco();
-			linhaTres[i].setPosition(new Point(x, 50));
-
-		}
-	}//fecha metodo para criar os blocos
 
 	// =============Encerra funções============\\
 
