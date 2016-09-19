@@ -7,13 +7,18 @@ import com.senac.SimpleJava.Graphics.Sprite;
 
 public class Bloco extends Sprite {
 	private boolean bloco = true;
-	private int cor = 0 + (int) Math.random()*10;
 	
-	public Bloco(int fase) {
+	public Bloco(Color cor) {
 		
-		super(24, 8, Color.RED);
+		super(24, 8, cor);
 		
 	}// fecha construtor
+	
+	public void blocoFase(int fase){
+		if(fase == 2){
+			new Sprite(24, 8, Color.GREEN);
+		}
+	}
 	
 	public void draw(Canvas canvas) {
 		if(bloco == true)

@@ -1,5 +1,7 @@
 package game;
 
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
 
 import com.senac.SimpleJava.Console;
@@ -23,6 +25,7 @@ public class Arkanoid extends GraphicApplication {
 	private Bloco[] linhaCinco = new Bloco[blocoArray];
 	private Bloco[] linhaSeis = new Bloco[blocoArray];
 	private Sprite paddle;
+	private Image fundo;
 	private boolean move = false;
 	private int vida = 10 , score = 0, recorde = 0, fase = 1;
 
@@ -32,6 +35,8 @@ public class Arkanoid extends GraphicApplication {
 	protected void draw(Canvas canvas) {
 		canvas.clear();
 
+		canvas.drawImage(fundo, 0, 0);
+		
 		bola.draw(canvas);
 
 		for (int i = 0; i < 10; i++) {
@@ -59,6 +64,7 @@ public class Arkanoid extends GraphicApplication {
 
 	@Override
 	protected void setup() {
+		carImg();
 		setResolution(Resolution.MSX);
 		setFramesPerSecond(100);
 
@@ -86,7 +92,10 @@ public class Arkanoid extends GraphicApplication {
 
 				if (Resolution.MSX.width - 254 < posicaoP.x && move == true) {
 					paddle.move(-5, 0);
-				} else {
+				}else if(Resolution.MSX.width - 254 < posicaoP.x && move == false){
+					paddle.move(-5, 0);
+					bola.move(-5, 0);
+				}else{
 					paddle.move(0, 0);
 				} // fecha else
 			}
@@ -98,7 +107,10 @@ public class Arkanoid extends GraphicApplication {
 
 				if (Resolution.MSX.width > posicaoP.x + 25 && move == true) {
 					paddle.move(5, 0);
-				} else {
+				}else if(Resolution.MSX.width > posicaoP.x + 25 && move == false){
+					paddle.move(5, 0);
+					bola.move(5, 0); 
+				}else{
 					paddle.move(0, 0);
 				} // fecha else
 			}
@@ -117,6 +129,7 @@ public class Arkanoid extends GraphicApplication {
 		colidiuBloco(linhaQuatro);
 		colidiuBloco(linhaCinco);
 		colidiuBloco(linhaSeis);
+		trocaFase();
 		
 		
 		if(move){
@@ -132,6 +145,15 @@ public class Arkanoid extends GraphicApplication {
 
 	// =============Inicia funções do jogo============\\
 
+	private void carImg(){
+		try {
+			fundo = new Image("imagens/fundo.png");
+			fundo.resize(Resolution.MSX.width,Resolution.MSX.height);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void colidiuParede(Bola bola, Sprite paddle) {
 		Point posicao = bola.getPosition();
 		if (posicao.x < 0 || posicao.x >= Resolution.MSX.width - 5) {
@@ -165,23 +187,35 @@ public class Arkanoid extends GraphicApplication {
 	}//fecha colisão com os blocos
 	
 	private void criaBlocos() {
+		if(fase == 1){
 		for (int i = 0; i < blocoArray; i++) {
 			int x = (i % 10) * 25 + 2;
-			linhaUm[i] = new Bloco(fase);
+			linhaUm[i] = new Bloco(Color.GRAY);
 			linhaUm[i].setPosition(new Point(x, 27));
-			linhaDois[i] = new Bloco(fase);
+			linhaDois[i] = new Bloco(Color.RED);
 			linhaDois[i].setPosition(new Point(x, 36));
-			linhaTres[i] = new Bloco(fase);
+			linhaTres[i] = new Bloco(Color.BLUE);
 			linhaTres[i].setPosition(new Point(x, 45));
-			linhaQuatro[i] = new Bloco(fase);
+			linhaQuatro[i] = new Bloco(Color.YELLOW);
 			linhaQuatro[i].setPosition(new Point(x, 54));
-			linhaCinco[i] = new Bloco(fase);
+			linhaCinco[i] = new Bloco(Color.MAGENTA);
 			linhaCinco[i].setPosition(new Point(x, 63));
-			linhaSeis[i] = new Bloco(fase);
+			linhaSeis[i] = new Bloco(Color.GREEN);
 			linhaSeis[i].setPosition(new Point(x, 72));
 
 		}
+		}else{
+			
+		}
 	}//fecha metodo para criar os blocos
+	
+	
+	private void trocaFase(){
+		if(score == 6000){
+			fase++;
+			criaBlocos();
+		}
+	}
 
 	private void reiniciar(Bola bola, Sprite paddle) {
 		int continuar;
