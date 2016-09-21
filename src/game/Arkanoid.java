@@ -27,7 +27,7 @@ public class Arkanoid extends GraphicApplication {
 	private Paddle paddle;
 	private Image fundo;
 	private boolean move = false, pause = false;
-	private int vida = 10, score = 0, recorde = 0, fase = 2, valorDeFase = 6000, mudaFase = valorDeFase;
+	private int vida = 10, score = 0, recorde = 0, fase = 3, valorDeFase = 6000, mudaFase = valorDeFase;
 
 	// ========================================Inicia canvas==================================================\\
 
@@ -71,7 +71,7 @@ public class Arkanoid extends GraphicApplication {
 		carImg();
 		setResolution(Resolution.MSX);
 		setFramesPerSecond(100);
-
+		
 		bola = new Bola(fase);
 
 		bindKeyPressed("SPACE", new KeyboardAction() {
@@ -139,7 +139,7 @@ public class Arkanoid extends GraphicApplication {
 		colidiuBloco(linhaSeis);
 		trocaFase();
 		carImg();
-
+		
 		if (move) {
 			bola.move();
 		}
@@ -151,8 +151,7 @@ public class Arkanoid extends GraphicApplication {
 		redraw();
 	}// fecha loop
 
-	// =====================================Inicia funções do
-	// jogo=====================================\\
+	// =====================================Inicia funções do jogo=====================================\\
 
 	private void carImg() {
 		try {
@@ -161,7 +160,7 @@ public class Arkanoid extends GraphicApplication {
 			} else if (fase == 2) {
 				fundo = new Image("imagens/fundo2.png");
 			} else {
-				fundo = new Image("imagens/fundo3.jpg");
+				fundo = new Image("imagens/fundo3.png");
 			}
 			fundo.resize(Resolution.MSX.width, Resolution.MSX.height);
 		} catch (IOException e) {
@@ -205,8 +204,10 @@ public class Arkanoid extends GraphicApplication {
 		if (fase == 1) {
 			for (int i = 0; i < blocoArray; i++) {
 				int x = (i % 10) * 25 + 2;
-				linhaUm[i] = new Bloco(Color.GRAY);
-				linhaUm[i].setPosition(new Point(x, 27));
+				if(i >= 4 && i <= 7){
+					linhaUm[i] = new Bloco(Color.GRAY);
+					linhaUm[i].setPosition(new Point(x, 27));
+					}
 				linhaDois[i] = new Bloco(Color.RED);
 				linhaDois[i].setPosition(new Point(x, 36));
 				linhaTres[i] = new Bloco(Color.BLUE);
@@ -227,15 +228,32 @@ public class Arkanoid extends GraphicApplication {
 				linhaUm[i] = new Bloco(Color.GRAY);
 				linhaUm[i].setPosition(new Point(2, y));
 				linhaDois[i] = new Bloco(Color.RED);
-				linhaDois[i].setPosition(new Point(27, y));
+				linhaDois[i].setPosition(new Point(46, y));
 				linhaTres[i] = new Bloco(Color.BLUE);
-				linhaTres[i].setPosition(new Point(52, y));
+				linhaTres[i].setPosition(new Point(92, y));
 				linhaQuatro[i] = new Bloco(Color.YELLOW);
-				linhaQuatro[i].setPosition(new Point(77, y));
+				linhaQuatro[i].setPosition(new Point(138, y));
 				linhaCinco[i] = new Bloco(Color.MAGENTA);
-				linhaCinco[i].setPosition(new Point(102, y));
+				linhaCinco[i].setPosition(new Point(184, y));
 				linhaSeis[i] = new Bloco(Color.GREEN);
-				linhaSeis[i].setPosition(new Point(127, y));
+				linhaSeis[i].setPosition(new Point(230, y));
+			}
+		}else{
+			for (int i = 0; i < blocoArray; i++) {
+				int x = (i % 10) * 25 + 2;
+				linhaUm[i] = new Bloco(Color.GRAY);
+				linhaUm[i].setPosition(new Point(x, 27));
+				linhaDois[i] = new Bloco(Color.RED);
+				linhaDois[i].setPosition(new Point(x, 36));
+				linhaTres[i] = new Bloco(Color.BLUE);
+				linhaTres[i].setPosition(new Point(x, 45));
+				linhaQuatro[i] = new Bloco(Color.YELLOW);
+				linhaQuatro[i].setPosition(new Point(x, 54));
+				linhaCinco[i] = new Bloco(Color.MAGENTA);
+				linhaCinco[i].setPosition(new Point(x, 63));
+				linhaSeis[i] = new Bloco(Color.GREEN);
+				linhaSeis[i].setPosition(new Point(x, 72));
+
 			}
 		}
 
