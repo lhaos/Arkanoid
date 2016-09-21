@@ -14,15 +14,13 @@ public class Bloco extends Sprite {
 		
 	}// fecha construtor
 	
-	public void blocoFase(int fase){
-		if(fase == 2){
-			new Sprite(24, 8, Color.GREEN);
-		}
-	}
-	
 	public void draw(Canvas canvas) {
 		if(bloco == true)
 		super.draw(canvas);
+	}
+	
+	public void naoDesenha(){
+		this.bloco = false;
 	}
 
 	public boolean bateu(Bola bola) {

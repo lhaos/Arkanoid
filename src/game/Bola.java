@@ -8,7 +8,7 @@ public class Bola extends Sprite {
 	private int dy = -1;
 	private int dx = 1;
 
-	public Bola(int fase) {
+	public Bola() {
 		super(5,5,Color.BLACK);
 		bolaInicio();
 		
