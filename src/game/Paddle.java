@@ -8,7 +8,7 @@ public class Paddle extends Sprite{
 
 	public Paddle(){
 		super(25, 5, Color.BLACK);
-		super.setPosition(Resolution.MSX.width / 2 - 5, Resolution.MSX.height - 10);
+		paddleInicio();
 	}
 	
 	public void paddleInicio(){
