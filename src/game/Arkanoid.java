@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import com.senac.SimpleJava.Console;
 import com.senac.SimpleJava.Graphics.Canvas;
 import com.senac.SimpleJava.Graphics.Color;
 import com.senac.SimpleJava.Graphics.GraphicApplication;
@@ -116,7 +115,7 @@ public class Arkanoid extends GraphicApplication {
 		redraw();
 	}// fecha loop
 
-	// =====================================Inicia funções do jogo=====================================\\
+	// =====================================Inicia funçoes do jogo=====================================\\
 
 	private void carImg() {
 		try {
@@ -144,7 +143,7 @@ public class Arkanoid extends GraphicApplication {
 		if (posicao.y >= Resolution.MSX.height - 5) {
 			caiu(bola, paddle);
 		}
-	}// fecha colisão da bola
+	}// fecha colisao da bola
 
 	private void colidiuPaddle(Bola bola, Sprite paddle) {
 		Point posicaoB = bola.getPosition();
@@ -152,7 +151,7 @@ public class Arkanoid extends GraphicApplication {
 		if (posicaoB.y + 5 == posicaoP.y && posicaoP.x + 27 >= posicaoB.x && posicaoP.x <= posicaoB.x + 5) {
 			bola.invertVertical();
 		}
-	}// fecha colisão com paddle
+	}// fecha colisao com paddle
 
 	private void colidiuBloco(Bloco[] linhaBloco) {
 
@@ -163,7 +162,7 @@ public class Arkanoid extends GraphicApplication {
 			} // fecha if
 		} // fecha for
 
-	}// fecha colisão com os blocos
+	}// fecha colisao com os blocos
 
 	private void criaBlocos() {
 		if (fase == 1) {
@@ -305,7 +304,7 @@ public class Arkanoid extends GraphicApplication {
 		vida = 5;
 		score = 0;
 		criaBlocos();
-	}
+	}//fecha metodo para reiniciar jogo
 	
 	private void botoes(){
 		bindKeyPressed("SPACE", new KeyboardAction() {
@@ -368,17 +367,17 @@ public class Arkanoid extends GraphicApplication {
 			}
 		});
 		
-	}//fecha metodo para usar os botões
+	}//fecha metodo para usar os botoes
 	
 	private void tutorial(){
 		String msg = "[Space] = Inicia e pausa o jogo depois de iniciado.";
 		msg += "\n[Seta esquerda] = Move o paddle para a esquerda.";
 		msg += "\n[Seta direita] = Move o paddle para a direita.";
-		msg += "\n[I] = Abre a janela de informações.";
+		msg += "\n[I] = Abre a janela de informaçoes.";
 		msg += "\n[R] = Reinicia o jogo.";
-		JOptionPane.showMessageDialog(null, ""+msg, "Informações", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, ""+msg, "Informaçoes", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	// ===========================================Encerra funções===============================================\\
+	// ===========================================Encerra funçoes===============================================\\
 
 }// fecha classe
